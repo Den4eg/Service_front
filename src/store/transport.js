@@ -1,7 +1,6 @@
 export default {
     state: {
-        transportToday: [
-            {
+        transportToday: [{
                 ticketNumber: 1,
                 onTer: true,
                 incoming: '08 : 30',
@@ -76,17 +75,32 @@ export default {
         ]
     },
     actions: {
-        CREATE_NEW_TICKET: ({ state }, payload) => {
+        SAVE_TICKET: function ({
+            state
+        }, data) {
+            for (let i in state.transportToday.find(item => item.ticketNumber === data.ticketNumber)) {
+                state.transportToday.find(item => item.ticketNumber === data.ticketNumber)[i] = data[i]
+            }
+        },
+        CREATE_NEW_TICKET: function ({
+            state
+        }, payload) {
             state.transportToday.push(payload);
-        }
+        },
     },
-    mutations: {},
+    mutations: {
+        test_mutations: function (state) {
+            console.log(state.transportToday);
+
+        }
+
+    },
     getters: {
         allTransportToday(state) {
             return state.transportToday;
         },
         transportOnTer(state) {
-            return state.transportToday.filter(item => item.onTer);
+            return state.transportToday.filter(item => item.onTer).reverse();
         },
         nextTicketNumber(state) {
             return state.transportToday.length + 1;
