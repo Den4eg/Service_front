@@ -94,7 +94,7 @@ export default {
   grid-area: footer;
 }
 
-@media (min-width: 1441px) and (max-width: 1919px) {
+@media (min-width: 1441px) {
   .main {
     display: grid;
     grid-template-columns: 7fr 2fr;
