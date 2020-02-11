@@ -10,7 +10,7 @@
           Пропуск №
           <span>{{ ticketValues.ticketNumber }}</span>
         </div>
-        <span class="ticket-date">{{ ticketValues.date }}</span>
+        <span class="ticket-date">{{ ticketValues.incomingDate }}</span>
       </div>
       <div class="ticket-data">
         <div class="ticket-documents-block" v-show="btnDocs.marker">
@@ -28,18 +28,17 @@
               type="text"
               name="incoming"
               disabled
-              v-model.lazy="ticketValues.incoming"
+              v-model="ticketValues.incomingTime"
               placeholder="Въезд"
             />
           </div>
           <div class="input-wraper">
             <input
               spellcheck="false"
-              disabled
               class="input-bold"
               type="text"
               name="outgoing"
-              v-model.lazy="ticketValues.outgoing"
+              v-model="ticketValues.outgoingTime"
               placeholder="Выезд"
             />
           </div>
@@ -49,8 +48,9 @@
               class="input-bold"
               type="text"
               name="car-number"
-              v-model.lazy="ticketValues.carNumber"
+              v-model="ticketValues.carNumber"
               placeholder="Номер машины"
+              @input="carNumberMask('$props','ticketValues', 'carNumber')"
             />
           </div>
           <div class="input-wraper">
@@ -58,6 +58,13 @@
               spellcheck="false"
               type="text"
               name="car-mark"
+              @input="
+                            capitalize(
+                                $event.target.value,
+                                'ticketValues',
+                                'carMark'
+                            )
+                        "
               v-model.lazy="ticketValues.carMark"
               placeholder="Марка машины"
             />
@@ -68,6 +75,14 @@
               class="input-bold"
               type="text"
               name="driverName"
+              @input="
+                            capitalize(
+                                $event.target.value,
+                                'ticketValues',
+                                'driverName',
+                                true
+                            )
+                        "
               v-model.lazy="ticketValues.driverName"
               placeholder="Ф.И.О."
             />
@@ -77,7 +92,8 @@
               spellcheck="false"
               type="text"
               name="driverDocs"
-              v-model.lazy="ticketValues.driverDocs"
+              @input="passportMask('$props','ticketValues','driverDocs')"
+              v-model="ticketValues.driverDocs"
               placeholder="Паспорт"
             />
           </div>
@@ -87,6 +103,13 @@
               class="input-bold"
               type="text"
               name="organisation"
+              @input="
+                            capitalize(
+                                $event.target.value,
+                                'ticketValues',
+                                'organisation'
+                            )
+                        "
               @change="transCom"
               v-model.lazy="ticketValues.organisation"
               placeholder="Организация"
@@ -98,16 +121,19 @@
               spellcheck="false"
               type="text"
               name="docDivision"
-              v-model.lazy="ticketValues.divisionCode"
+              @input="passportCodeMask('$props', 'ticketValues', 'divisionCode')"
+              v-model="ticketValues.divisionCode"
               placeholder="Код подразделения"
             />
           </div>
           <div class="input-wraper">
+            <span class="phone-modifier" v-if="this.$props.ticketValues.phone">+7</span>
             <input
               spellcheck="false"
               type="text"
               name="driver-phone"
-              v-model.lazy="ticketValues.phone"
+              @input="phoneMask('$props', 'ticketValues', 'phone')"
+              v-model="ticketValues.phone"
               placeholder="Контактный телефон"
             />
           </div>
@@ -116,7 +142,8 @@
               spellcheck="false"
               type="text"
               name="trailer"
-              v-model.lazy="ticketValues.trailerNumber"
+              @input="trailerMask('$props', 'ticketValues', 'trailerNumber')"
+              v-model="ticketValues.trailerNumber"
               placeholder="Номер прицепа"
             />
           </div>
@@ -143,50 +170,12 @@
   </div>
 </template>
 <script>
+import ticketMethods from "../../mixins/ticketMethods";
 export default {
   data() {
     return {
       btnDocs: { marker: 0, value: ["Документы", "Сохранить"] },
-      transportComps: {
-        value: [
-          ["dl", "дл", "дел", "деловые", "линии", "деловые линии"],
-          [
-            "м",
-            "мажор",
-            "маж",
-            "мейджер",
-            "мейжер",
-            "мейжор",
-            "мейджор",
-            "мейжор",
-            "major"
-          ],
-          ["дчл", "дичел", "дхл", "диейчел", "диейчэл", "dhl", "d", "д"],
-          ["пэк", "пек", "п"],
-          [
-            "ж",
-            "жд",
-            "желдор",
-            "жилдор",
-            "жел",
-            "желдорекспедиция",
-            "желдорэкспедиция",
-            "желдорекспидиция",
-            "желдорэкспидиция"
-          ],
-          ["эйртранс", "ейртранс", "ейр", "эйр", "айр", "Эайртранс", "э", "а"]
-        ],
-        colors: [
-          "#8f8f8f",
-          "#f78317",
-          "#df3030",
-          "#5630df",
-          "#4db64d",
-          "#3ecfb7",
-          "#3e3e3e00"
-        ],
-        label: ["Деловые Линии", "Major", "DHL", "ПЭК", "Желдор", "Эйртранс"]
-      },
+
       operationTypes: ["отгруз", "приход"],
       orgColor: "",
       arrayOfDocuments: ""
@@ -198,9 +187,11 @@ export default {
         this.arrayOfDocuments = this.arrayOfDocuments
           .split(/\D/g)
           .filter(el => {
-            if (el) return true;
+            if (el && el.length > 0) return true;
           })
           .join("  /  ");
+        // TO DO !!!!!!!!!!!!!!!!
+        // Обработка события для сохранения в сторе
       }
       this.btnDocs.marker = +!this.btnDocs.marker;
     },
@@ -224,7 +215,8 @@ export default {
     ticketObjectLog: function() {
       this.btnSaveDocs();
       this.$props.ticketValues.documents = this.arrayOfDocuments.split("  /  ");
-      this.$props.ticketValues.outgoing = this.nowTime;
+      this.$props.ticketValues.outgoingTime = ticketMethods.nowDate("time");
+      this.$props.ticketValues.outgoingDate = ticketMethods.nowDate("date");
       this.btnDocs.marker = 0;
 
       this.$props.ticketValues.onTer = false;
@@ -236,17 +228,15 @@ export default {
     }
   },
   computed: {
-    nowTime: function() {
-      let d = new Date();
-      let h = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
-      let m = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
-      return `${h} : ${m}`;
+    transportComps: function() {
+      return this.$store.getters.transComps;
     }
   },
   created: function() {
     this.transCom();
   },
-  props: ["ticketValues"]
+  props: ["ticketValues"],
+  mixins: [ticketMethods]
 };
 </script>
 
@@ -258,15 +248,13 @@ export default {
   box-shadow: 4px 4px 5px #22222299;
   margin-bottom: 10px;
   position: relative;
-}
-.app-ticket:first-of-type {
-  margin-bottom: 0;
+  width: 97.3%;
 }
 
 .ticket-title {
   display: grid;
   grid-template-rows: 23px;
-  grid-template-columns: 20fr 1fr;
+  /* grid-template-columns: 20fr 1fr; */
   justify-items: start;
   color: white;
 }
@@ -274,6 +262,7 @@ export default {
   justify-self: center;
   font-size: 16px;
   font-weight: 400;
+  text-indent: 30px;
   text-shadow: 1px 1px 3px black;
 }
 .ticketNumber span {
@@ -345,8 +334,8 @@ export default {
   grid-auto-flow: column;
 }
 input {
-  max-width: 100%;
-  min-width: 100%;
+  box-sizing: content-box;
+  width: 100%;
   padding: 0;
   height: 30px;
   font-size: 0.9rem;
@@ -388,7 +377,7 @@ input:disabled {
   position: absolute;
   right: -1px;
   top: 0;
-  width: 20px;
+  width: 22px;
   height: 24px;
   color: black;
   opacity: 0.7;
@@ -443,6 +432,16 @@ select[name="operation-type"] {
   padding: 5px;
   text-align: center;
   justify-self: stretch;
+}
+
+.phone-modifier {
+  position: absolute;
+  background-color: #7ec499;
+  padding: 6px 5px 5px 2px;
+  color: black;
+  font-weight: 600;
+  font-size: 17px;
+  opacity: 0.7;
 }
 
 /* media query */

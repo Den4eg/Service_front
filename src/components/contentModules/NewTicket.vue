@@ -38,7 +38,7 @@
                             'input-error': $v.ticketLabels.carNumber.$error
                         }"
             id="input-carnumber"
-            @input="carNumberMask"
+            @input="carNumberMask('$data','ticketLabels', 'carNumber')"
             v-model="$v.ticketLabels.carNumber.$model"
             placeholder="Номер авто"
           />
@@ -85,7 +85,7 @@
             :class="{
                             'input-error': $v.ticketLabels.driverDocs.$error
                         }"
-            @input="passportMask"
+            @input="passportMask('$data','ticketLabels','driverDocs')"
             v-model="$v.ticketLabels.driverDocs.$model"
             placeholder="Паспорт"
           />
@@ -104,16 +104,18 @@
                                 'organisation'
                             )
                         "
+            @change="transCom"
             v-model="ticketLabels.organisation"
             placeholder="Организация"
           />
+          <span class="organisation-color" :style="'background-color:' + this.orgColor"></span>
         </div>
         <div class="input-wraper">
           <input
             spellcheck="false"
             type="text"
             class="input-spacing"
-            @input="passportCodeMask"
+            @input="passportCodeMask('$data', 'ticketLabels', 'divisionCode')"
             v-model="ticketLabels.divisionCode"
             placeholder="Код подразделения"
           />
@@ -124,7 +126,7 @@
             spellcheck="false"
             type="tel"
             class="phone-mod-input input-spacing"
-            @input="phoneMask"
+            @input="phoneMask('$data', 'ticketLabels', 'phone')"
             v-model="ticketLabels.phone"
             placeholder="Номер телефона"
           />
@@ -133,7 +135,7 @@
           <input
             spellcheck="false"
             type="text"
-            @input="trailerMask"
+            @input="trailerMask('$data', 'ticketLabels', 'trailerNumber')"
             v-model="ticketLabels.trailerNumber"
             placeholder="Номер прицепа"
           />
@@ -149,6 +151,7 @@
 
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
+import ticketMethods from "../../mixins/ticketMethods";
 
 export default {
   data() {
@@ -157,7 +160,7 @@ export default {
         hiden: true,
         value: -280
       },
-
+      orgColor: "",
       selectValues: { values: ["отгруз", "приход"], selected: "отгруз" },
       ticketLabels: {
         carNumber: "",
@@ -172,9 +175,7 @@ export default {
     };
   },
   /*==============================================================================
-
               New ticket form Validation settings
-
   ==============================================================================*/
   validations: {
     ticketLabels: {
@@ -193,175 +194,54 @@ export default {
       }
     }
   },
-  /*!~~!~!~!~!~!~!~!~!~!~!~!~!!~!~!~!~!~!!~~!~!!~!~!~!~!!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!!~!
-
-  !!!!!!!!!!!!!!!!!!!!!            Methods                          !!!!!!!!!!!!!!!!!!!!!
-
-            !~~!~!~!~!~!~!~!~!~!~!~!~!!~!~!~!~!~!!~~!~!!~!~!~!~!!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!!~!*/
+  mixins: [ticketMethods],
   methods: {
-    capitalize(val, target, field, mode) {
-      let test = val.match(/([а-яА-я]+)(\s?)([а-яА-Я]?)([а-яА-Я]?)/);
-      if (mode) {
-        if (val.length !== 0 && test) {
-          for (let index = 1; index < test.length; index++) {
-            test[index].length > 1
-              ? (test[index] =
-                  test[index].charAt(0).toUpperCase() + test[index].slice(1))
-              : test[index].toUpperCase() + ".";
-          }
-          val = !test[2]
-            ? test[1].charAt(0).toUpperCase() + test[1].slice(1)
-            : !test[4]
-            ? test[1].charAt(0).toUpperCase() +
-              test[1].slice(1) +
-              test[2] +
-              test[3].toUpperCase()
-            : test[1].charAt(0).toUpperCase() +
-              test[1].slice(1) +
-              test[2] +
-              test[3].toUpperCase() +
-              "." +
-              test[4].toUpperCase() +
-              ".";
+    transCom: function() {
+      let company = this.ticketLabels.organisation.toLowerCase();
+      for (let str in this.transportComps.value) {
+        for (let val of this.transportComps.value[str]) {
+          if (val == company) {
+            this.orgColor = this.transportComps.colors[str];
+            this.ticketLabels.organisation = this.transportComps.label[str];
+            return;
+          } else this.orgColor = "#3e3e3e00";
         }
-      } else {
-        val = val.charAt(0).toUpperCase() + val.slice(1);
       }
-      this[target][field] = val;
     },
-    /*
-===========================================================================================
-
-                      Reset new ticket form function
-
-===========================================================================================
-
-
-*/
-    formReset() {
+    formReset: function() {
       for (let item in this.ticketLabels) {
         if (this.ticketLabels.hasOwnProperty(item)) {
           this.ticketLabels[item] = "";
         }
       }
       this.$v.$reset();
+      this.transCom();
     },
-    /*===========================================================================================
-
-                      Toggle new ticket form function
-
-===========================================================================================*/
-
     toggleTicket() {
       this.ticketPosition.hiden = !this.ticketPosition.hiden;
     },
-
-    /*===========================================================================================
-
-                      Sending new ticket form function
-
-===========================================================================================*/
-    sendTicket() {
+    sendTicket: function() {
       this.$v.ticketLabels.$touch();
       if (!this.$v.$invalid) {
         this.toggleTicket();
-        // console.log(this.$v.ticketLabels);
-        this.$store.dispatch("CREATE_NEW_TICKET", this.sendingData);
+        this.$store.dispatch("CREATE_TICKET", this.sendingData);
         this.formReset();
       }
-    },
-    nowDate(arg) {
-      let d = new Date();
-      let year = d.getFullYear() % 2000;
-      let month =
-        d.getMonth() < 9 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1;
-      let date = d.getDate() < 10 ? "0" + d.getDate() : d.getDate();
-      let h = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
-      let m = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
-      return (function() {
-        if (arg === "time") return `${h} : ${m}`;
-        else if (arg === "date") return `${date}.${month}.${year}`;
-      })();
-    },
-    carNumberMask() {
-      this.ticketLabels.carNumber = this.ticketLabels.carNumber.toUpperCase();
-      let value = this.ticketLabels.carNumber.split(" ").join("");
-      if (value.length === 0) this.ticketLabels.carNumber = "";
-      if (value.length > 0 && value.length <= 5) {
-        let reg = /([а-я]+)([0-9]+)/i;
-        this.ticketLabels.carNumber = value.replace(reg, "$1 $2");
-      }
-      if (value.length >= 5 && value.length <= 7) {
-        let reg = /([а-я]+)([0-9]+)([а-я])/i;
-        this.ticketLabels.carNumber = value.replace(reg, "$1 $2 $3");
-      }
-      if (value.length >= 7) {
-        let reg = /([а-я]+)([0-9]+)([а-я]+)([0-9]+)/i;
-        this.ticketLabels.carNumber = value.replace(reg, "$1 $2 $3 $4");
-      }
-    },
-
-    trailerMask() {
-      this.ticketLabels.trailerNumber = this.ticketLabels.trailerNumber.toUpperCase();
-      let value = this.ticketLabels.trailerNumber.split(" ").join("");
-      if (value.length === 0) this.ticketLabels.trailerNumber = "";
-      if (value.length > 0 && value.length <= 7) {
-        let reg = /([а-я]+)([0-9]{1,4})/i;
-        this.ticketLabels.trailerNumber = value.replace(reg, "$1 $2");
-      }
-      if (value.length >= 7 && value.length <= 12) {
-        let reg = /([а-я]+)([0-9]{4})([0-9]+)/i;
-        this.ticketLabels.trailerNumber = value.replace(reg, "$1 $2 $3");
-      }
-    },
-    passportMask() {
-      let passport = this.ticketLabels.driverDocs;
-      if (passport.length > 0)
-        this.ticketLabels.driverDocs = passport.toUpperCase();
-      if (passport.length > 4) {
-        let reg = /^([0-9]{2})([0-9]{2})(\d{0,6})$/i;
-        this.ticketLabels.driverDocs = passport.replace(reg, "$1 $2 $3");
-      }
-    },
-    passportCodeMask() {
-      let code = this.ticketLabels.divisionCode;
-      if (code) {
-        let reCode = code.replace(/\D/g, "").match(/(\d{0,3})(\d{0,3})/i);
-        if (reCode) {
-          code = !reCode[2] ? reCode[1] : reCode[1] + "-" + reCode[2];
-        }
-        this.ticketLabels.divisionCode = code;
-      }
-    },
-    phoneMask() {
-      let value = this.ticketLabels.phone;
-
-      let x = value
-        .replace(/\D/g, "")
-        .match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-      this.ticketLabels.phone = !x[2]
-        ? x[1]
-        : "(" +
-          x[1] +
-          ") " +
-          x[2] +
-          (x[3] ? "-" + x[3] : "") +
-          (x[4] ? "-" + x[4] : "");
     }
   },
-  /*!~~!~!~!~!~!~!~!~!~!~!~!~!!~!~!~!~!~!!~~!~!!~!~!~!~!!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!!~!
 
-  !!!!!!!!!!!!!!!!!!!!!            Computed                          !!!!!!!!!!!!!!!!!!!!!
-
-            !~~!~!~!~!~!~!~!~!~!~!~!~!!~!~!~!~!~!!~~!~!!~!~!~!~!!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!~!!~!*/
   computed: {
-    sendingData() {
+    transportComps: function() {
+      return this.$store.getters.transComps;
+    },
+    sendingData: function() {
       return {
         ticketNumber: this.propTicketNumber,
         onTer: true,
-        incoming: this.nowDate("time"),
-        date: this.nowDate("date"),
-        outgoing: "",
+        incomingTime: ticketMethods.nowDate("time"),
+        incomingDate: ticketMethods.nowDate("date"),
+        outgoingTime: "",
+        outgoingDate: "",
         carNumber: this.ticketLabels.carNumber,
         carMark: this.ticketLabels.carMark,
         trailerNumber: this.ticketLabels.trailerNumber,
@@ -369,17 +249,16 @@ export default {
         driverDocs: this.ticketLabels.driverDocs,
         divisionCode: this.ticketLabels.divisionCode,
         organisation: this.ticketLabels.organisation,
-        phone: this.ticketLabels.phone ? "+7 " + this.ticketLabels.phone : "",
+        phone: this.ticketLabels.phone,
         documents: "",
         note: "",
         operation: this.selectValues.selected
       };
     },
-    propTicketNumber() {
+    propTicketNumber: function() {
       return this.$store.getters.nextTicketNumber;
     }
-  },
-  created() {}
+  }
 };
 </script>
 
@@ -396,6 +275,7 @@ export default {
 }
 
 .wraper {
+  color: rgba(62, 62, 62, 0);
   position: relative;
   display: grid;
   grid-gap: 8px;
@@ -521,9 +401,8 @@ input {
 }
 .phone-modifier {
   position: absolute;
-  background-color: #797979;
-  padding: 6px 10px 6px 12px;
-  height: auto;
+  background-color: #58bd7f;
+  padding: 6px 10px 5px 9px;
   color: black;
   font-weight: 600;
   font-size: 17px;
@@ -559,5 +438,19 @@ input {
 .btn-succes {
   align-self: center;
   justify-self: end;
+}
+
+.organisation-color {
+  font-weight: 500;
+  position: absolute;
+  right: -1px;
+  top: 0;
+  width: 20px;
+  height: 24px;
+  color: black;
+  opacity: 0.7;
+
+  text-align: center;
+  padding-top: 7px;
 }
 </style>

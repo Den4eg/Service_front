@@ -24,10 +24,6 @@ export const eventEmiter = new Vue({
                 permission: 9
             }
         };
-    },
-    methods: {},
-    created() {
-        // this.user(this.$cookie.sessionID)
     }
 });
 
@@ -35,5 +31,8 @@ new Vue({
     el: '#app',
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
+    beforeMount() {
+        store.commit('AUTH_TOKEN', localStorage.getItem('token'));
+    }
 });
