@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters.getUserProperties.permission;
+      return this.$store.getters.getUserProperties;
     }
   }
 };

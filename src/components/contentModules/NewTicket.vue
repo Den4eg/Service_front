@@ -1,152 +1,144 @@
 <template>
-  <div
-    class="new-ticket-main"
-    :style="
-            ticketPosition.hiden
-                ? {
-                      left: ticketPosition.value + 'px',
-                      'box-shadow': '0 0 0 white'
-                  }
-                : ''
-        "
-  >
-    <div
-      @click="toggleTicket"
-      class="support-view-modifier"
-      :class="ticketPosition.hiden ? 'support-view-modifier-hover' : ''"
-    ></div>
-    <div class="wraper">
-      <select v-model="selectValues.selected" class="new-ticket-select">
-        <option v-for="val in selectValues.values" :key="val">
-          {{
-          val
-          }}
-        </option>
-      </select>
-      <div class="ticket-title">
-        Пропуск №
-        <span>{{ propTicketNumber }}</span>
-      </div>
-      <form class="new-ticket-form">
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            autocomplete="off"
-            type="text"
-            class="input-spacing"
-            :class="{
-                            'input-error': $v.ticketLabels.carNumber.$error
-                        }"
-            id="input-carnumber"
-            @input="carNumberMask('$data','ticketLabels', 'carNumber')"
-            v-model="$v.ticketLabels.carNumber.$model"
-            placeholder="Номер авто"
-          />
-        </div>
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            type="text"
-            @input="
-                            capitalize(
-                                $event.target.value,
-                                'ticketLabels',
-                                'carMark'
-                            )
-                        "
-            v-model="ticketLabels.carMark"
-            placeholder="Марка авто"
-          />
-        </div>
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            type="text"
-            :class="{
-                            'input-error': $v.ticketLabels.driverName.$error
-                        }"
-            @input="
-                            capitalize(
-                                $event.target.value,
-                                'ticketLabels',
-                                'driverName',
-                                true
-                            )
-                        "
-            v-model="$v.ticketLabels.driverName.$model"
-            placeholder="Ф.И.О."
-          />
-        </div>
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            type="text"
-            class="input-spacing"
-            :class="{
-                            'input-error': $v.ticketLabels.driverDocs.$error
-                        }"
-            @input="passportMask('$data','ticketLabels','driverDocs')"
-            v-model="$v.ticketLabels.driverDocs.$model"
-            placeholder="Паспорт"
-          />
-        </div>
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            type="text"
-            :class="{
-                            'input-error': $v.ticketLabels.organisation.$error
-                        }"
-            @input="
-                            capitalize(
-                                $event.target.value,
-                                'ticketLabels',
-                                'organisation'
-                            )
-                        "
-            @change="transCom"
-            v-model="ticketLabels.organisation"
-            placeholder="Организация"
-          />
-          <span class="organisation-color" :style="'background-color:' + this.orgColor"></span>
-        </div>
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            type="text"
-            class="input-spacing"
-            @input="passportCodeMask('$data', 'ticketLabels', 'divisionCode')"
-            v-model="ticketLabels.divisionCode"
-            placeholder="Код подразделения"
-          />
-        </div>
-        <div class="input-wraper">
-          <span class="phone-modifier" v-if="this.ticketLabels.phone">+7</span>
-          <input
-            spellcheck="false"
-            type="tel"
-            class="phone-mod-input input-spacing"
-            @input="phoneMask('$data', 'ticketLabels', 'phone')"
-            v-model="ticketLabels.phone"
-            placeholder="Номер телефона"
-          />
-        </div>
-        <div class="input-wraper">
-          <input
-            spellcheck="false"
-            type="text"
-            @input="trailerMask('$data', 'ticketLabels', 'trailerNumber')"
-            v-model="ticketLabels.trailerNumber"
-            placeholder="Номер прицепа"
-          />
-        </div>
-      </form>
-      <div class="btn-block">
-        <div class="btn-reset btn" @click="formReset">Очистить</div>
-        <div class="btn-succes btn" @click="sendTicket">Отправить</div>
-      </div>
-    </div>
-  </div>
+	<div
+		class="new-ticket-main"
+		:style="
+			ticketPosition.hiden
+				? { left: ticketPosition.value + 'px', 'box-shadow': '0 0 0 white' }
+				: ''
+		"
+	>
+		<div
+			@click="toggleTicket"
+			class="support-view-modifier"
+			:class="ticketPosition.hiden ? 'support-view-modifier-hover' : ''"
+		></div>
+		<div class="wraper">
+			<select v-model="selectValues.selected" class="new-ticket-select">
+				<option v-for="val in selectValues.values" :key="val">
+					{{ val }}
+				</option>
+			</select>
+			<div class="ticket-title">
+				Пропуск №
+				<span>{{ propTicketNumber }}</span>
+			</div>
+			<form class="new-ticket-form">
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						autocomplete="off"
+						type="text"
+						class="input-spacing"
+						:class="{
+							'input-error': $v.ticketLabels.carNumber.$error,
+						}"
+						id="input-carnumber"
+						@input="carNumberMask('$data', 'ticketLabels', 'carNumber')"
+						v-model="$v.ticketLabels.carNumber.$model"
+						placeholder="Номер авто"
+					/>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="text"
+						@input="capitalize($event.target.value, 'ticketLabels', 'carMark')"
+						v-model="ticketLabels.carMark"
+						placeholder="Марка авто"
+					/>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="text"
+						:class="{
+							'input-error': $v.ticketLabels.driverName.$error,
+						}"
+						@input="
+							capitalize(
+								$event.target.value,
+								'ticketLabels',
+								'driverName',
+								true,
+							)
+						"
+						v-model="$v.ticketLabels.driverName.$model"
+						placeholder="Ф.И.О."
+					/>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="text"
+						class="input-spacing"
+						:class="{
+							'input-error': $v.ticketLabels.driverDocs.$error,
+						}"
+						@input="passportMask('$data', 'ticketLabels', 'driverDocs')"
+						v-model="$v.ticketLabels.driverDocs.$model"
+						placeholder="Паспорт"
+					/>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="text"
+						:class="{
+							'input-error': $v.ticketLabels.organisation.$error,
+						}"
+						@input="
+							capitalize($event.target.value, 'ticketLabels', 'organisation')
+						"
+						@change="transCom"
+						v-model="ticketLabels.organisation"
+						placeholder="Организация"
+					/>
+					<span
+						class="organisation-color"
+						:style="'background-color:' + this.orgColor"
+					></span>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="text"
+						class="input-spacing"
+						v-maska="'###-###'"
+						v-model="ticketLabels.divisionCode"
+						placeholder="Код подразделения"
+					/>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="tel"
+						class="phone-mod-input input-spacing"
+						v-model="ticketLabels.phone"
+						placeholder="Номер телефона"
+						v-maska="'8 (###) ###-##-##'"
+					/>
+				</div>
+				<div class="input-wraper">
+					<input
+						spellcheck="false"
+						type="text"
+						v-maska="{
+							mask: 'AA AAAA A**',
+							tokens: {
+								A: { pattern: /[0-9a-zA-Zа-яА-Я]/, uppercase: true },
+							},
+						}"
+						v-model="ticketLabels.trailerNumber"
+						placeholder="Номер прицепа"
+					/>
+				</div>
+			</form>
+			<div class="btn-block">
+				<div class="btn-reset btn" @click="formReset">Очистить</div>
+				<div class="btn-succes btn" @click="sendTicket">Отправить</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -154,303 +146,313 @@ import { required, minLength } from "vuelidate/lib/validators";
 import ticketMethods from "../../mixins/ticketMethods";
 
 export default {
-  data() {
-    return {
-      ticketPosition: {
-        hiden: true,
-        value: -280
-      },
-      orgColor: "",
-      selectValues: { values: ["отгруз", "приход"], selected: "отгруз" },
-      ticketLabels: {
-        carNumber: "",
-        carMark: "",
-        trailerNumber: "",
-        driverName: "",
-        driverDocs: "",
-        divisionCode: "",
-        organisation: "",
-        phone: ""
-      }
-    };
-  },
-  /*==============================================================================
+	data() {
+		return {
+			ticketPosition: {
+				hiden: true,
+				value: -280,
+			},
+			orgColor: "",
+			selectValues: { values: ["отгруз", "приход"], selected: "отгруз" },
+			ticketLabels: {
+				carNumber: "",
+				carMark: "",
+				trailerNumber: "",
+				driverName: "",
+				driverDocs: "",
+				divisionCode: "",
+				organisation: "",
+				phone: "",
+			},
+		};
+	},
+	/*==============================================================================
               New ticket form Validation settings
   ==============================================================================*/
-  validations: {
-    ticketLabels: {
-      carNumber: {
-        required,
-        minLength: minLength(5)
-      },
-      driverName: {
-        required
-      },
-      driverDocs: {
-        required
-      },
-      organisation: {
-        required
-      }
-    }
-  },
-  mixins: [ticketMethods],
-  methods: {
-    transCom: function() {
-      let company = this.ticketLabels.organisation.toLowerCase();
-      for (let str in this.transportComps.value) {
-        for (let val of this.transportComps.value[str]) {
-          if (val == company) {
-            this.orgColor = this.transportComps.colors[str];
-            this.ticketLabels.organisation = this.transportComps.label[str];
-            return;
-          } else this.orgColor = "#3e3e3e00";
-        }
-      }
-    },
-    formReset: function() {
-      for (let item in this.ticketLabels) {
-        if (this.ticketLabels.hasOwnProperty(item)) {
-          this.ticketLabels[item] = "";
-        }
-      }
-      this.$v.$reset();
-      this.transCom();
-    },
-    toggleTicket() {
-      this.ticketPosition.hiden = !this.ticketPosition.hiden;
-    },
-    sendTicket: function() {
-      this.$v.ticketLabels.$touch();
-      if (!this.$v.$invalid) {
-        this.toggleTicket();
-        this.$store.dispatch("CREATE_TICKET", this.sendingData);
-        this.formReset();
-      }
-    }
-  },
+	validations: {
+		ticketLabels: {
+			carNumber: {
+				required,
+				minLength: minLength(5),
+			},
+			driverName: {
+				required,
+			},
+			driverDocs: {
+				required,
+			},
+			organisation: {
+				required,
+			},
+		},
+	},
+	mixins: [ticketMethods],
+	methods: {
+		transCom: function() {
+			let company = this.ticketLabels.organisation.toLowerCase();
+			for (let str in this.transportComps.value) {
+				for (let val of this.transportComps.value[str]) {
+					if (val == company) {
+						this.orgColor = this.transportComps.colors[str];
+						this.ticketLabels.organisation = this.transportComps.label[str];
+						return;
+					} else this.orgColor = "#3e3e3e00";
+				}
+			}
+		},
+		formReset: function() {
+			for (let item in this.ticketLabels) {
+				if (this.ticketLabels.hasOwnProperty(item)) {
+					this.ticketLabels[item] = "";
+				}
+			}
+			this.$v.$reset();
+			this.transCom();
+		},
+		toggleTicket() {
+			this.ticketPosition.hiden = !this.ticketPosition.hiden;
+			setTimeout(() => {
+				this.formReset();
+			}, 1000);
+		},
+		sendTicket: function() {
+			this.$v.ticketLabels.$touch();
+			if (!this.$v.$invalid) {
+				this.toggleTicket();
+				this.$store.dispatch("CREATE_TICKET", this.sendingData);
+				this.formReset();
+			}
+		},
+	},
 
-  computed: {
-    transportComps: function() {
-      return this.$store.getters.transComps;
-    },
-    sendingData: function() {
-      return {
-        ticketNumber: this.propTicketNumber,
-        onTer: true,
-        incomingTime: ticketMethods.nowDate("time"),
-        incomingDate: ticketMethods.nowDate("date"),
-        outgoingTime: "",
-        outgoingDate: "",
-        carNumber: this.ticketLabels.carNumber,
-        carMark: this.ticketLabels.carMark,
-        trailerNumber: this.ticketLabels.trailerNumber,
-        driverName: this.ticketLabels.driverName,
-        driverDocs: this.ticketLabels.driverDocs,
-        divisionCode: this.ticketLabels.divisionCode,
-        organisation: this.ticketLabels.organisation,
-        phone: this.ticketLabels.phone,
-        documents: "",
-        note: "",
-        operation: this.selectValues.selected
-      };
-    },
-    propTicketNumber: function() {
-      return this.$store.getters.nextTicketNumber;
-    }
-  }
+	computed: {
+		transportComps: function() {
+			return this.$store.getters.transComps;
+		},
+		sendingData: function() {
+			return {
+				ticketNumber: this.propTicketNumber,
+				onTer: true,
+				incomingTime: ticketMethods.nowDate("time"),
+				incomingDate: ticketMethods.nowDate("date"),
+				outgoingTime: "",
+				outgoingDate: "",
+				carNumber: this.ticketLabels.carNumber,
+				carMark: this.ticketLabels.carMark,
+				trailerNumber: this.ticketLabels.trailerNumber,
+				driverName: this.ticketLabels.driverName,
+				driverDocs: this.ticketLabels.driverDocs,
+				divisionCode: this.ticketLabels.divisionCode,
+				organisation: this.ticketLabels.organisation,
+				phone: this.ticketLabels.phone,
+				documents: "",
+				note: "",
+				operation: this.selectValues.selected,
+			};
+		},
+		propTicketNumber: function() {
+			return this.$store.getters.nextTicketNumber;
+		},
+	},
 };
 </script>
 
 <style scoped>
 .new-ticket-main {
-  position: fixed;
-  top: 70px;
-  left: 10px;
-  width: 280px;
-  box-shadow: 4px 4px 7px #3d3d3d;
-  border-radius: 3px;
-  z-index: 15;
-  transition: all ease-in-out 0.4s;
+	position: fixed;
+	top: 70px;
+	left: 10px;
+	width: 280px;
+	box-shadow: 4px 4px 7px #3d3d3d;
+	border-radius: 3px;
+	z-index: 15;
+	transition: all ease-in-out 0.4s;
 }
 
 .wraper {
-  color: rgba(62, 62, 62, 0);
-  position: relative;
-  display: grid;
-  grid-gap: 8px;
-  justify-content: stretch;
-  align-content: center;
-  width: 100%;
-  box-sizing: border-box;
-  height: 100%;
-  background-color: #333333;
-  color: #fff;
-  border-radius: 3px;
-  z-index: 12;
-  padding: 10px;
+	color: rgba(62, 62, 62, 0);
+	position: relative;
+	display: grid;
+	grid-gap: 8px;
+	justify-content: stretch;
+	align-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	height: 100%;
+	background-color: #333333;
+	color: #fff;
+	border-radius: 3px;
+	z-index: 12;
+	padding: 10px;
 }
 
 .new-ticket-select {
-  position: absolute;
-  top: 8px;
-  left: 10px;
-  background-color: #333333;
-  color: #08aef1;
-  outline: none;
-  border: none;
-  padding: 3px;
-  font-size: 18px;
-  appearance: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  text-align: center;
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	background-color: #333333;
+	color: #08aef1;
+	outline: none;
+	border: none;
+	padding: 3px;
+	font-size: 18px;
+	appearance: none;
+	box-sizing: border-box;
+	cursor: pointer;
+	text-align: center;
 }
 
 .ticket-title {
-  padding-left: 10px;
-  align-self: center;
-  justify-self: center;
+	padding-left: 10px;
+	align-self: center;
+	justify-self: center;
 }
 .ticket-title span {
-  font-size: 18px;
-  margin-left: 8px;
+	font-size: 18px;
+	margin-left: 8px;
 }
 
 .support-view-modifier {
-  position: absolute;
-  background-color: #333333;
-  width: 120px;
-  height: 150px;
-  box-shadow: 1px 1px 4px #08aef1;
-  right: -35px;
-  border-radius: 0 12% 12% 0;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 10;
-  display: flex;
-  justify-content: flex-end;
-  transition: all 0.2s;
+	position: absolute;
+	background-color: #333333;
+	width: 120px;
+	height: 150px;
+	box-shadow: 1px 1px 4px #08aef1;
+	right: -35px;
+	border-radius: 0 12% 12% 0;
+	overflow: hidden;
+	cursor: pointer;
+	z-index: 10;
+	display: flex;
+	justify-content: flex-end;
+	transition: all 0.2s;
 }
 
 .support-view-modifier-hover:hover {
-  transform: translateX(2px);
+	transform: translateX(2px);
 }
 
 .support-view-modifier::after {
-  content: "Пропуск";
-  color: #08aef1;
-  position: absolute;
-  font-size: 15px;
-  width: 10px;
-  padding: 13px 15px 13px 0;
-  word-wrap: break-word;
+	content: "Пропуск";
+	color: #08aef1;
+	position: absolute;
+	font-size: 15px;
+	width: 10px;
+	padding: 13px 15px 13px 0;
+	word-wrap: break-word;
 }
 
 /*  inputs  */
 .new-ticket-form {
-  display: grid;
-  grid-auto-flow: row;
-  grid-template-columns: 1fr;
-  justify-content: center;
-  align-content: center;
-  grid-gap: 15px;
+	display: grid;
+	grid-auto-flow: row;
+	grid-template-columns: 1fr;
+	justify-content: center;
+	align-content: center;
+	grid-gap: 15px;
 }
 input {
-  max-width: 100%;
-  min-width: 100%;
-  height: 30px;
-  font-size: 0.9rem;
-  font-family: "Roboto", sans-serif;
-  font-weight: 600;
-  text-align: center;
-  border-style: none;
-  line-break: initial;
-  outline: none;
-  background-color: #d6d5d5 !important;
-  border-right: 1px solid #cfcfcf;
-  border-bottom: 1px solid #cfcfcf;
-  border-radius: 2px;
-  box-shadow: 3px 3px 3px #07070799;
+	max-width: 100%;
+	min-width: 100%;
+	height: 30px;
+	font-size: 0.9rem;
+	font-family: "Roboto", sans-serif;
+	font-weight: 600;
+	text-align: center;
+	border-style: none;
+	line-break: initial;
+	outline: none;
+	background-color: #d6d5d5 !important;
+	border-right: 1px solid #cfcfcf;
+	border-bottom: 1px solid #cfcfcf;
+	border-radius: 2px;
+	box-shadow: 3px 3px 3px #07070799;
 }
 input:focus {
-  background-color: #0f0f0f;
-  box-shadow: 0 0 5px 2px #08aef1;
+	background-color: #0f0f0f;
+	box-shadow: 0 0 5px 2px #08aef1;
 }
 
 input::placeholder {
-  color: #797979;
-  font-family: "Roboto-mono", sans-serif;
-  font-weight: 400;
+	color: #797979;
+	font-family: "Roboto-mono", sans-serif;
+	font-weight: 400;
 }
 input:disabled {
-  color: black;
+	color: black;
 }
 
 input {
-  color: transparent;
-  text-shadow: 0 0 0 black;
+	color: transparent;
+	text-shadow: 0 0 0 black;
 }
 .input-error {
-  /* border: 2px solid red; */
-  box-shadow: 0 0 5px 2px #f72323;
+	/* border: 2px solid red; */
+	box-shadow: 0 0 5px 2px #f72323;
 }
 
 .input-wraper {
-  position: relative;
+	position: relative;
 }
+
+.phone-mod-input {
+	text-align: start;
+	text-indent: 70px;
+}
+
 .phone-modifier {
-  position: absolute;
-  background-color: #58bd7f;
-  padding: 6px 10px 5px 9px;
-  color: black;
-  font-weight: 600;
-  font-size: 17px;
-  opacity: 0.7;
+	position: absolute;
+	/* background-color: #58bd7f; */
+	left: 50px;
+	padding: 6px 10px 5px 9px;
+	color: black;
+	font-weight: 600;
+	font-size: 16px;
+	/* opacity: 0.7; */
 }
 /*  buttons block  */
 .btn-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: space-between;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	justify-content: space-between;
 }
 
 .btn {
-  border: 2px solid #08aef1;
-  color: #08aef1;
-  border-radius: 14px;
-  padding: 5px;
-  cursor: pointer;
-  transition: 0.1s;
+	border: 2px solid #08aef1;
+	color: #08aef1;
+	border-radius: 14px;
+	padding: 5px;
+	cursor: pointer;
+	transition: 0.1s;
 }
 .btn:hover {
-  color: #e908f1;
-  border: 2px solid #e908f1;
+	color: #e908f1;
+	border: 2px solid #e908f1;
 }
 .btn:active {
-  transform: translateY(-1px);
-  text-shadow: 0 0 3px #b3b1b1 !important;
+	transform: translateY(-1px);
+	text-shadow: 0 0 3px #b3b1b1 !important;
 }
 .btn-reset {
-  align-self: center;
-  justify-self: start;
+	align-self: center;
+	justify-self: start;
 }
 .btn-succes {
-  align-self: center;
-  justify-self: end;
+	align-self: center;
+	justify-self: end;
 }
 
 .organisation-color {
-  font-weight: 500;
-  position: absolute;
-  right: -1px;
-  top: 0;
-  width: 20px;
-  height: 24px;
-  color: black;
-  opacity: 0.7;
+	font-weight: 500;
+	position: absolute;
+	right: -1px;
+	top: 0;
+	width: 20px;
+	height: 24px;
+	color: black;
+	opacity: 0.7;
 
-  text-align: center;
-  padding-top: 7px;
+	text-align: center;
+	padding-top: 7px;
 }
 </style>

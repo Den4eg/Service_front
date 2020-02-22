@@ -35,12 +35,12 @@ export default {
   methods: {},
   computed: {
     ticketRights() {
-      return this.$store.getters.getUserProperties.permission >= 7
+      return this.$store.getters.getUserProperties >= 7
         ? true
         : false;
     },
     transportList() {
-      return this.$store.getters.getUserProperties.permission >= 7
+      return this.$store.getters.getUserProperties >= 7
         ? true
         : false;
     }

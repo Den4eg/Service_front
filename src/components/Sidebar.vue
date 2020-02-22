@@ -58,6 +58,8 @@ export default {
   height: inherit;
   position: relative;
   overflow-y: auto;
+  scrollbar-color: #c5c5c5 #3e3e3e;
+  scrollbar-width: thin;
 }
 
 .scroll-wraper::-webkit-scrollbar {

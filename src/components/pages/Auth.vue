@@ -46,7 +46,7 @@
               <img src="../assets/hide.svg" alt="!" class="visible" v-else />
             </span>
           </div>
-          <button class="btn btn-submit" @click.prevent="logged">Log in</button>
+          <button class="btn btn-submit" @click.prevent="logged">Войти</button>
         </form>
       </div>
     </div>
@@ -64,18 +64,18 @@ export default {
   },
   methods: {
     clearErrors() {
-      this.$store.commit("AUTH_SUCCESS");
+      this.$store.commit("clear_errors");
     },
     logged() {
-      this.$store.commit("AUTH_SUCCESS");
+      this.clearErrors();
       this.$store
         .dispatch("AUTH_LOGIN", {
           login: this.login,
           password: this.password
         })
-        .then(resolve => {
+        .then(() => {
           this.$store
-            .dispatch("USER_PROPS_FETCH", resolve)
+            .dispatch("FETCH_USER_PROPS")
             .then(() => this.$router.push("/"));
         });
     }

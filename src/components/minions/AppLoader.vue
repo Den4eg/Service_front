@@ -21,7 +21,7 @@
 export default {
   computed: {
     viewLoader: function() {
-      return this.$store.getters.fetch_status == "loading" ? true : false;
+      return this.$store.getters.loading_status;
     }
   }
 };

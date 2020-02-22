@@ -5,57 +5,54 @@ import Auth from './components/pages/Auth';
 import store from './store';
 
 const router = new VueRouter({
-    routes: [
-        {
+    routes: [{
             path: '/',
             component: Welcome,
-            meta: { ifAuthenticated: true },
-            beforeEnter: (to, from, next) => {
-                if (store.getters.isAuth && store.getters.tokenExp) {
-                    next();
-                } else {
-                    next('/auth');
-                }
+            meta: {
+                ifAuthenticated: true
             }
         },
         {
             path: '/auth',
-            component: Auth,
-            beforeEnter: (to, from, next) => {
-                if (store.getters.isAuth && store.getters.tokenExp) {
-                    next('/');
-                } else {
-                    next();
-                }
-            }
+            component: Auth
+        }, {
+            name: 'test',
+            path: '/test',
+            component: Welcome
         },
         {
             name: 'journal',
             path: '/journal',
             component: Journal,
-            meta: { ifAuthenticated: true }
+            meta: {
+                ifAuthenticated: true
+            }
         },
         {
             name: 'history',
             path: '/history',
             component: Welcome,
-            meta: { ifAuthenticated: true }
+            meta: {
+                ifAuthenticated: true
+            }
         },
         {
             name: 'visitors',
             path: '/visitors',
             component: Welcome,
-            meta: { ifAuthenticated: true }
+            meta: {
+                ifAuthenticated: true
+            }
         }
     ],
     mode: 'history'
 });
 
 router.beforeEach((to, from, next) => {
-    store.dispatch('USER_PROPS_FETCH', localStorage.getItem('token'));
+    store.dispatch('AUTH_TOKEN_REFRESH')
     if (to.matched.some(res => res.meta.ifAuthenticated)) {
-        if (!store.getters.isAuth || !store.getters.tokenExp) {
-            store.dispatch('AUTH_LOGOUT');
+        if (!store.getters.isAuthenticated) {
+            store.commit('logout')
             next('/auth');
         } else {
             next();

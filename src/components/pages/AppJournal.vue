@@ -30,10 +30,12 @@ export default {
 .scroll-wraper {
   position: relative;
   overflow-y: scroll;
+  scrollbar-color: #3e3e3e #6868688e;
+  scrollbar-width: thin;
 }
 
 .scroll-wraper::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.596);
+  box-shadow: inset 0 0 6px #00000098;
   border-radius: 5px;
   background-color: #f5f5f5;
 }
