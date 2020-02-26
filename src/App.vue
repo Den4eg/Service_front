@@ -3,6 +3,7 @@
   <div id="app">
     <span id="bgimg"></span>
     <app-header class="app-header"></app-header>
+    <appLoader></appLoader>
     <div class="container">
       <app-ticket class="app-ticket" v-if="ticketRights"></app-ticket>
       <app-transport v-if="transportList"></app-transport>
@@ -18,14 +19,15 @@ import Header from "./components/Header";
 import AppTicket from "./components/contentModules/NewTicket";
 import AppTransport from "./components/contentModules/RegisterTransport";
 import Footer from "./components/Footer.vue";
-import { eventEmiter } from "./main";
+import AppLoader from "./components/minions/AppLoader";
 
 export default {
   components: {
     appHeader: Header,
     appFooter: Footer,
     appTicket: AppTicket,
-    appTransport: AppTransport
+    appTransport: AppTransport,
+    appLoader: AppLoader
   },
   data() {
     return {};
@@ -33,10 +35,14 @@ export default {
   methods: {},
   computed: {
     ticketRights() {
-      return eventEmiter.$data.userDetails.permission >= 7 ? true : false;
+      return this.$store.getters.getUserProperties >= 7
+        ? true
+        : false;
     },
     transportList() {
-      return eventEmiter.$data.userDetails.permission >= 7 ? true : false;
+      return this.$store.getters.getUserProperties >= 7
+        ? true
+        : false;
     }
   }
 };
@@ -130,56 +136,4 @@ export default {
     display: none !important;
   }
 }
-/* 
-@media (min-width: 661px) and (max-width: 910px) {
-  .main {
-    width: 85%;
-    display: grid;
-  }
-
-
-
-  #day {
-    display: none;
-  }
-
-  #ticket-new-form {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: repeat(10, 1fr) !important;
-    grid-gap: 10px !important;
-  }
-
-  .app-sidebar {
-    display: none !important;
-  }
-
-  input {
-    font-size: 18px !important;
-  }
-}
-
-@media (max-width: 660px) {
-  .main {
-    width: 75%;
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  #day {
-    display: none;
-  }
-
-  #ticket-new-form {
-    grid-template-columns: auto !important;
-    grid-template-rows: repeat(10, 1fr) !important;
-  }
-
-  .clock {
-    display: none !important;
-  }
-
-  .app-sidebar {
-    display: none !important;
-  }
-} */
 </style>

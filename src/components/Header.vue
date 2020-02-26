@@ -28,7 +28,7 @@
 <script>
 import headMenu from "./headerTags/Headmenu.vue";
 import headClock from "./headerTags/Headclock.vue";
-import { eventEmiter } from "../main";
+// import { eventEmiter } from "../main";
 
 export default {
   data() {
@@ -49,7 +49,9 @@ export default {
   },
   computed: {
     divisionViewRight() {
-      return eventEmiter.$data.userDetails.permission >= 5 ? true : false;
+      return this.$store.getters.getUserProperties.permission >= 5
+        ? true
+        : false;
     }
   }
 };

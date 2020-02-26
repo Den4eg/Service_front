@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import { eventEmiter } from "../../main";
-
 export default {
   data() {
     return {
@@ -30,7 +28,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return eventEmiter.$data.userDetails.permission;
+      return this.$store.getters.getUserProperties;
     }
   }
 };

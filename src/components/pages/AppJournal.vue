@@ -1,7 +1,9 @@
 <template>
   <div class="main">
     <div class="scroll-wraper">
-      <app-content class="app-content"></app-content>
+      <div class="wrap-block">
+        <app-content class="app-content"></app-content>
+      </div>
     </div>
     <app-sidebar v-if="test" class="app-sidebar"></app-sidebar>
   </div>
@@ -27,11 +29,13 @@ export default {
 <style scoped>
 .scroll-wraper {
   position: relative;
-  overflow-y: auto;
+  overflow-y: scroll;
+  scrollbar-color: #3e3e3e #6868688e;
+  scrollbar-width: thin;
 }
 
 .scroll-wraper::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.596);
+  box-shadow: inset 0 0 6px #00000098;
   border-radius: 5px;
   background-color: #f5f5f5;
 }
@@ -48,10 +52,8 @@ export default {
   background-color: #3e3e3e;
 }
 
-.app-content {
-  width: 99.2%;
+.wrap-block {
+  width: 99.9%;
   position: absolute;
-  display: inline-flex;
-  flex-flow: column-reverse;
 }
 </style>
