@@ -11,7 +11,11 @@
 					Пропуск №
 					<span>{{ ticketValues.ticketNumber }}</span>
 				</div>
+<<<<<<< HEAD
 				<span class="ticket-date">{{ ticketValues.incomingDate }}</span>
+=======
+				<span class="ticket-date">{{ ticketValues.date }}</span>
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 			</div>
 			<div class="ticket-data">
 				<div class="ticket-documents-block" v-show="btnDocs.marker">
@@ -33,17 +37,29 @@
 							type="text"
 							name="incoming"
 							disabled
+<<<<<<< HEAD
 							v-model="ticketValues.incomingTime"
+=======
+							v-model.lazy="ticketValues.incoming"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Въезд"
 						/>
 					</div>
 					<div class="input-wraper">
 						<input
 							spellcheck="false"
+<<<<<<< HEAD
 							class="input-bold"
 							type="text"
 							name="outgoing"
 							v-model="ticketValues.outgoingTime"
+=======
+							disabled
+							class="input-bold"
+							type="text"
+							name="outgoing"
+							v-model.lazy="ticketValues.outgoing"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Выезд"
 						/>
 					</div>
@@ -53,9 +69,14 @@
 							class="input-bold"
 							type="text"
 							name="car-number"
+<<<<<<< HEAD
 							v-model="ticketValues.carNumber"
 							placeholder="Номер машины"
 							@input="carNumberMask('$props', 'ticketValues', 'carNumber')"
+=======
+							v-model.lazy="ticketValues.carNumber"
+							placeholder="Номер машины"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 						/>
 					</div>
 					<div class="input-wraper">
@@ -63,9 +84,12 @@
 							spellcheck="false"
 							type="text"
 							name="car-mark"
+<<<<<<< HEAD
 							@input="
 								capitalize($event.target.value, 'ticketValues', 'carMark')
 							"
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							v-model.lazy="ticketValues.carMark"
 							placeholder="Марка машины"
 						/>
@@ -76,6 +100,7 @@
 							class="input-bold"
 							type="text"
 							name="driverName"
+<<<<<<< HEAD
 							@input="
 								capitalize(
 									$event.target.value,
@@ -84,6 +109,8 @@
 									true,
 								)
 							"
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							v-model.lazy="ticketValues.driverName"
 							placeholder="Ф.И.О."
 						/>
@@ -93,8 +120,12 @@
 							spellcheck="false"
 							type="text"
 							name="driverDocs"
+<<<<<<< HEAD
 							@input="passportMask('$props', 'ticketValues', 'driverDocs')"
 							v-model="ticketValues.driverDocs"
+=======
+							v-model.lazy="ticketValues.driverDocs"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Паспорт"
 						/>
 					</div>
@@ -104,11 +135,16 @@
 							class="input-bold"
 							type="text"
 							name="organisation"
+<<<<<<< HEAD
 							@input="
 								capitalize($event.target.value, 'ticketValues', 'organisation')
 							"
 							@change="transCom"
 							v-model="ticketValues.organisation"
+=======
+							@change="transCom"
+							v-model.lazy="ticketValues.organisation"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Организация"
 						/>
 						<span
@@ -121,8 +157,12 @@
 							spellcheck="false"
 							type="text"
 							name="docDivision"
+<<<<<<< HEAD
 							v-maska="'###-###'"
 							v-model="ticketValues.divisionCode"
+=======
+							v-model.lazy="ticketValues.divisionCode"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Код подразделения"
 						/>
 					</div>
@@ -131,8 +171,12 @@
 							spellcheck="false"
 							type="text"
 							name="driver-phone"
+<<<<<<< HEAD
 							v-maska="'8 (###) ###-##-##'"
 							v-model="ticketValues.phone"
+=======
+							v-model.lazy="ticketValues.phone"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Контактный телефон"
 						/>
 					</div>
@@ -141,6 +185,7 @@
 							spellcheck="false"
 							type="text"
 							name="trailer"
+<<<<<<< HEAD
 							v-maska="{
 								mask: 'AA AAAA A**',
 								tokens: {
@@ -148,6 +193,9 @@
 								},
 							}"
 							v-model="ticketValues.trailerNumber"
+=======
+							v-model.lazy="ticketValues.trailerNumber"
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 							placeholder="Номер прицепа"
 						/>
 					</div>
@@ -181,7 +229,50 @@ export default {
 	data() {
 		return {
 			btnDocs: { marker: 0, value: ["Документы", "Сохранить"] },
+<<<<<<< HEAD
 
+=======
+			transportComps: {
+				value: [
+					["dl", "дл", "дел", "деловые", "линии", "деловые линии"],
+					[
+						"м",
+						"мажор",
+						"маж",
+						"мейджер",
+						"мейжер",
+						"мейжор",
+						"мейджор",
+						"мейжор",
+						"major",
+					],
+					["дчл", "дичел", "дхл", "диейчел", "диейчэл", "dhl", "d", "д"],
+					["пэк", "пек", "п"],
+					[
+						"ж",
+						"жд",
+						"желдор",
+						"жилдор",
+						"жел",
+						"желдорекспедиция",
+						"желдорэкспедиция",
+						"желдорекспидиция",
+						"желдорэкспидиция",
+					],
+					["эйртранс", "ейртранс", "ейр", "эйр", "айр", "Эайртранс", "э", "а"],
+				],
+				colors: [
+					"#8f8f8f",
+					"#f78317",
+					"#df3030",
+					"#5630df",
+					"#4db64d",
+					"#3ecfb7",
+					"#3e3e3e00",
+				],
+				label: ["Деловые Линии", "Major", "DHL", "ПЭК", "Желдор", "Эйртранс"],
+			},
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 			operationTypes: ["отгруз", "приход"],
 			orgColor: "",
 			arrayOfDocuments: "",
@@ -193,11 +284,17 @@ export default {
 				this.arrayOfDocuments = this.arrayOfDocuments
 					.split(/\D/g)
 					.filter(el => {
+<<<<<<< HEAD
 						if (el && el.length > 0) return true;
 					})
 					.join("  /  ");
 				// TO DO !!!!!!!!!!!!!!!!
 				// Обработка события для сохранения в сторе
+=======
+						if (el) return true;
+					})
+					.join("  /  ");
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 			}
 			this.btnDocs.marker = +!this.btnDocs.marker;
 		},
@@ -221,6 +318,7 @@ export default {
 		ticketObjectLog: function() {
 			this.btnSaveDocs();
 			this.$props.ticketValues.documents = this.arrayOfDocuments.split("  /  ");
+<<<<<<< HEAD
 			this.$props.ticketValues.outgoingTime = ticketMethods.nowDate("time");
 			this.$props.ticketValues.outgoingDate = ticketMethods.nowDate("date");
 			this.btnDocs.marker = 0;
@@ -236,31 +334,67 @@ export default {
 	computed: {
 		transportComps: function() {
 			return this.$store.getters.transComps;
+=======
+			this.$props.ticketValues.outgoing = this.nowTime;
+
+			this.$props.ticketValues.onTer = false;
+			this.$props.ticketValues.phone = this.$props.ticketValues.phone
+				? this.$props.ticketValues.phone.replace(/\D/g, "").slice(1)
+				: "";
+			this.$store.dispatch("SAVE_TICKET", this.$props.ticketValues);
+			this.btnDocs.marker = 0;
+			this.$store.commit("test_mutations");
+		},
+	},
+	computed: {
+		nowTime: function() {
+			let d = new Date();
+			let h = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
+			let m = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+			return `${h} : ${m}`;
+		},
+		ticketValuesReverse: function() {
+			return this.$props.ticketValues;
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 		},
 	},
 	created: function() {
 		this.transCom();
 	},
 	props: ["ticketValues"],
+<<<<<<< HEAD
 	mixins: [ticketMethods],
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 };
 </script>
 
 <style scoped>
 .app-ticket {
+<<<<<<< HEAD
+=======
+	/* min-width: 98%; */
+	max-width: inherit;
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	background-color: #3e3e3e;
 	padding: 10px;
 	border-radius: 2px;
 	box-shadow: 4px 4px 5px #22222299;
 	margin-bottom: 10px;
 	position: relative;
+<<<<<<< HEAD
 	width: 97.3%;
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 }
 
 .ticket-title {
 	display: grid;
 	grid-template-rows: 23px;
+<<<<<<< HEAD
 	/* grid-template-columns: 20fr 1fr; */
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	justify-items: start;
 	color: white;
 }
@@ -268,7 +402,10 @@ export default {
 	justify-self: center;
 	font-size: 16px;
 	font-weight: 400;
+<<<<<<< HEAD
 	text-indent: 30px;
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	text-shadow: 1px 1px 3px black;
 }
 .ticketNumber span {
@@ -282,16 +419,23 @@ export default {
 }
 
 .ticket-body {
+<<<<<<< HEAD
 	position: relative;
 	display: grid;
 	grid-template-rows: auto 3fr auto;
+=======
+	display: grid;
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	grid-gap: 8px;
 }
 
 .ticket-documents-block {
 	display: grid;
 	grid-auto-flow: column;
+<<<<<<< HEAD
 	position: relative;
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	grid-template-columns: 1fr 3fr;
 	grid-gap: 8px;
 	height: 70px;
@@ -340,8 +484,13 @@ export default {
 	grid-auto-flow: column;
 }
 input {
+<<<<<<< HEAD
 	box-sizing: content-box;
 	width: 100%;
+=======
+	max-width: 100%;
+	min-width: 100%;
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	padding: 0;
 	height: 30px;
 	font-size: 0.9rem;
@@ -383,7 +532,11 @@ input:disabled {
 	position: absolute;
 	right: -1px;
 	top: 0;
+<<<<<<< HEAD
 	width: 22px;
+=======
+	width: 20px;
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 	height: 24px;
 	color: black;
 	opacity: 0.7;
@@ -438,6 +591,7 @@ select[name="operation-type"] {
 	padding: 5px;
 	text-align: center;
 	justify-self: stretch;
+<<<<<<< HEAD
 }
 
 .phone-modifier {
@@ -448,6 +602,8 @@ select[name="operation-type"] {
 	font-weight: 600;
 	font-size: 17px;
 	opacity: 0.7;
+=======
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
 }
 
 /* media query */

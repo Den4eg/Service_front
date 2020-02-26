@@ -1,7 +1,6 @@
 export default {
     state: {
-        transportToday: [
-            {
+        transportToday: [{
                 ticketNumber: 1,
                 onTer: true,
                 incomingTime: '08 : 30',
@@ -136,16 +135,42 @@ export default {
         }
     },
     actions: {
+<<<<<<< HEAD
         CREATE_TICKET: ({ state }, payload) => {
+=======
+        SAVE_TICKET: function ({
+            state
+        }, data) {
+            for (let i in state.transportToday.find(item => item.ticketNumber === data.ticketNumber)) {
+                state.transportToday.find(item => item.ticketNumber === data.ticketNumber)[i] = data[i]
+            }
+        },
+        CREATE_NEW_TICKET: function ({
+            state
+        }, payload) {
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
             state.transportToday.push(payload);
-        }
+        },
     },
-    mutations: {},
+    mutations: {
+        test_mutations: function (state) {
+            console.log(state.transportToday);
+
+        }
+
+    },
     getters: {
         allTransportToday: function(state) {
             return state.transportToday;
         },
+<<<<<<< HEAD
         nextTicketNumber: function(state) {
+=======
+        transportOnTer(state) {
+            return state.transportToday.filter(item => item.onTer).reverse();
+        },
+        nextTicketNumber(state) {
+>>>>>>> 9d58bb2c1ded36d1147fce3180cb75a64f34b682
             return state.transportToday.length + 1;
         },
         transComps: function(state) {
