@@ -34,6 +34,9 @@
           </div>
         </div>
       </div>
+      <div class="appendCar" v-if="userRights">
+        <button>Добавить</button>
+      </div>
     </div>
   </div>
 </template>
@@ -56,6 +59,9 @@ export default {
     }
   },
   computed: {
+    userRights: function() {
+      return this.$store.getters.getUserProperties >= 9;
+    },
     transportArr() {
       return this.$store.getters.employeeCars;
     },
@@ -134,7 +140,27 @@ export default {
 
 .scroll-wraper {
   overflow: auto;
-  width: 288px;
+  width: 257px;
+  scrollbar-color: #3e3e3e #6868688e;
+  scrollbar-width: thin;
+}
+
+.scroll-wraper::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px #00000098;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+.scroll-wraper::-webkit-scrollbar {
+  padding: 5px;
+  width: 5px;
+  border-radius: 9px;
+  background-color: #f5f5f5;
+}
+
+.scroll-wraper::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #3e3e3e;
 }
 
 /*  car label  */

@@ -1,58 +1,72 @@
 import VueRouter from 'vue-router';
-import Journal from './components/pages/AppJournal';
-import Welcome from './components/pages/Welcome';
-import Auth from './components/pages/Auth';
 import store from './store';
+//        Pages
+import Welcome from './components/pages/Welcome';
+import Login from './components/pages/auth/Login';
+import Register from './components/pages/auth/Register';
+import History from './components/pages/history/History';
+import Visitors from './components/pages/visitors/Visitors';
+import Admin from './components/pages/admin/admin.main';
 
 const router = new VueRouter({
-    routes: [{
+    routes: [
+        {
+            name: 'root',
             path: '/',
             component: Welcome,
             meta: {
-                ifAuthenticated: true
-            }
+                ifAuthenticated: true,
+            },
         },
+        { name: 'auth', path: '/auth', component: Login },
         {
-            path: '/auth',
-            component: Auth
-        }, {
-            name: 'test',
-            path: '/test',
-            component: Welcome
+            name: 'register',
+            path: '/register',
+            component: Register,
         },
         {
             name: 'journal',
             path: '/journal',
-            component: Journal,
+            component: () => import('@/components/pages/journal/AppJournal'),
             meta: {
-                ifAuthenticated: true
-            }
+                ifAuthenticated: true,
+            },
         },
+
         {
             name: 'history',
             path: '/history',
-            component: Welcome,
+            component: History,
             meta: {
-                ifAuthenticated: true
-            }
+                ifAuthenticated: true,
+            },
         },
         {
             name: 'visitors',
             path: '/visitors',
-            component: Welcome,
+            component: Visitors,
             meta: {
-                ifAuthenticated: true
-            }
-        }
+                ifAuthenticated: true,
+            },
+        },
+        {
+            name: 'admin',
+            path: '/admin',
+            component: Admin,
+            meta: {
+                ifAuthenticated: true,
+            },
+        },
     ],
-    mode: 'history'
+    mode: 'history',
 });
 
 router.beforeEach((to, from, next) => {
-    store.dispatch('AUTH_TOKEN_REFRESH')
-    if (to.matched.some(res => res.meta.ifAuthenticated)) {
+    store.commit('clear_errors');
+    store.dispatch('AUTH_TOKEN_REFRESH');
+    if (to.matched.some((res) => res.meta.ifAuthenticated)) {
         if (!store.getters.isAuthenticated) {
-            store.commit('logout')
+            store.commit('logout');
             next('/auth');
         } else {
             next();
@@ -61,5 +75,13 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
+const getDivisions = () => {
+    store.dispatch('DIVISIONS_GET');
+};
+
+const errorListener = (err) => {
+    console.log(err);
+};
+router.onReady(getDivisions, errorListener);
 
 export default router;

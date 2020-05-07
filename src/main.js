@@ -8,39 +8,28 @@ import router from './route';
 import store from './store';
 
 import Vuelidate from 'vuelidate';
+import Maska from 'maska';
+//=================== fetch interceptors =====================
 
-//test Maska
+// (function() {
+//     let originalFetch = fetch;
+//     fetch = function() {
+//         return originalFetch.apply(this, arguments).then(function(data) {
+//             someFunctionToDoSomething();
+//             return data;
+//         });
+//     };
+// })();
 
+//=================== fetch interceptors =====================
 
-import Maska from 'maska'
-Vue.use(Maska)
-
-
-//test Maska
-
-
-
+Vue.use(Maska);
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
-
-// export const eventEmiter = new Vue({
-//     data: function() {
-//         return {
-//             userDetails: {
-//                 login: null,
-//                 name: null,
-//                 tabNumber: null,
-//                 phoneInternal: null,
-//                 division: null,
-//                 permission: 9
-//             }
-//         };
-//     }
-// });
 
 new Vue({
     el: '#app',
     router,
     store,
-    render: h => h(App)
+    render: (h) => h(App),
 });

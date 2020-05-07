@@ -7,7 +7,9 @@
     <div class="container">
       <app-ticket class="app-ticket" v-if="ticketRights"></app-ticket>
       <app-transport v-if="transportList"></app-transport>
-      <router-view></router-view>
+      <transition :name="transitionName" mode="out-in">
+        <router-view class="child-view" />
+      </transition>
 
       <app-footer class="app-footer"></app-footer>
     </div>
@@ -30,20 +32,40 @@ export default {
     appLoader: AppLoader
   },
   data() {
-    return {};
+    return {
+      transitionName: "slide-left",
+      routesPriorityList: []
+    };
+  },
+  watch: {
+    $route(to, from) {
+      if (from) {
+        if (
+          this.routesPriorityList.indexOf(to.name) >
+          this.routesPriorityList.indexOf(from.name)
+        ) {
+          this.transitionName = "slide-left";
+        } else {
+          this.transitionName = "slide-right";
+        }
+      } else {
+        this.transitionName = "";
+      }
+    }
   },
   methods: {},
   computed: {
     ticketRights() {
-      return this.$store.getters.getUserProperties >= 7
-        ? true
-        : false;
+      return this.$store.getters.getUserProperties >= 7;
     },
     transportList() {
-      return this.$store.getters.getUserProperties >= 7
-        ? true
-        : false;
+      return this.$store.getters.getUserProperties >= 7;
     }
+  },
+  created() {
+    this.$router.options.routes.forEach(r =>
+      this.routesPriorityList.push(r.name)
+    );
   }
 };
 </script>
@@ -88,6 +110,7 @@ export default {
   grid-area: main;
   justify-self: center;
   margin-top: 10px;
+  overflow: visible;
 }
 
 .app-sidebar {
@@ -135,5 +158,28 @@ export default {
   .app-sidebar {
     display: none !important;
   }
+}
+
+/* transitions */
+
+.child-view {
+  /* position: absolute; */
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+  /* top: 90px;
+    left: 30px;
+    right: 30px; */
+}
+
+.slide-left-enter,
+.slide-right-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(100px, 0);
+  transform: translate(100px, 0);
+}
+.slide-left-leave-active,
+.slide-right-enter {
+  opacity: 0;
+  -webkit-transform: translate(-100px, 0);
+  transform: translate(-100px, 0);
 }
 </style>

@@ -12,13 +12,13 @@ export default {
                 carMark: 'Ман',
                 trailerNumber: '',
                 driverName: 'Фет А.А.',
-                driverDocs: '12 32 543654',
-                divisionCode: '234-543',
-                organisation: 'Мажор',
-                phone: '(234) 523-42-34',
-                documents: '2314312,2314533,2316677',
+                driverDocs: '1232543654',
+                divisionCode: 234543,
+                organisation: 'мажор',
+                phone: 2345234234,
+                documents: [1234567, 9879878],
                 note: '',
-                operation: 'отгруз'
+                operation: false,
             },
             {
                 ticketNumber: 2,
@@ -34,10 +34,10 @@ export default {
                 driverDocs: '21 23 456234',
                 divisionCode: '214-342',
                 organisation: 'пек',
-                phone: '(364) 564-56-34',
-                documents: '2345511,2331122,2356611',
+                phone: 3645645634,
+                documents: [],
                 note: '',
-                operation: 'отгруз'
+                operation: true,
             },
             {
                 ticketNumber: 3,
@@ -53,10 +53,10 @@ export default {
                 driverDocs: '21 23 456234',
                 divisionCode: '341-311',
                 organisation: 'DHL',
-                phone: '(905) 005-55-55',
-                documents: '',
+                phone: 9050055555,
+                documents: [],
                 note: '',
-                operation: 'приход'
+                operation: true,
             },
             {
                 ticketNumber: 4,
@@ -71,12 +71,12 @@ export default {
                 driverName: 'Прокурорских П.П.',
                 driverDocs: '43 12 436666',
                 divisionCode: '326-221',
-                organisation: 'ЭксТракЭкспедишенТрейд',
-                phone: '(988) 111-11-11',
-                documents: '',
+                organisation: 'эксТракЭкспедишенТрейд',
+                phone: 9881111111,
+                documents: [],
                 note: '',
-                operation: 'отгруз'
-            }
+                operation: false,
+            },
         ],
         transportComps: {
             value: [
@@ -90,10 +90,10 @@ export default {
                     'мейжор',
                     'мейджор',
                     'мейжор',
-                    'major'
+                    'major',
                 ],
                 ['дчл', 'дичел', 'дхл', 'диейчел', 'диейчэл', 'dhl', 'd', 'д'],
-                ['пэк', 'пек', 'п'],
+                ['пэк', 'пек', 'п', 'пе', 'пэ'],
                 [
                     'ж',
                     'жд',
@@ -103,7 +103,7 @@ export default {
                     'желдорекспедиция',
                     'желдорэкспедиция',
                     'желдорекспидиция',
-                    'желдорэкспидиция'
+                    'желдорэкспидиция',
                 ],
                 [
                     'эйртранс',
@@ -113,8 +113,8 @@ export default {
                     'айр',
                     'Эайртранс',
                     'э',
-                    'а'
-                ]
+                    'а',
+                ],
             ],
             colors: [
                 '#8f8f8f',
@@ -123,7 +123,7 @@ export default {
                 '#5630df',
                 '#4db64d',
                 '#3ecfb7',
-                '#3e3e3e00'
+                '#3e3e3e00',
             ],
             label: [
                 'Деловые Линии',
@@ -131,14 +131,19 @@ export default {
                 'DHL',
                 'ПЭК',
                 'Желдор',
-                'Эйртранс'
-            ]
-        }
+                'Эйртранс',
+            ],
+        },
     },
     actions: {
         CREATE_TICKET: ({ state }, payload) => {
             state.transportToday.push(payload);
-        }
+        },
+        PATCH_DOCS: ({ state }, payload) => {
+            state.transportToday
+                .find((ticket) => ticket.ticketNumber === payload.ticketNumber)
+                .documents.push([payload.docs]);
+        },
     },
     mutations: {},
     getters: {
@@ -150,6 +155,6 @@ export default {
         },
         transComps: function(state) {
             return state.transportComps;
-        }
-    }
+        },
+    },
 };

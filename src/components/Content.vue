@@ -25,7 +25,7 @@ export default {
 </script>
 <style scoped>
 .newT-move {
-  transition: 1s all 400ms;
+  transition: 1s all 0.6s;
 }
 
 .newT-leave-active {

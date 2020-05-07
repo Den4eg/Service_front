@@ -2,7 +2,6 @@
   <div id="head-menu">
     <span class="menu-item" v-for="item in menuItems" :key="item.url">
       <router-link
-        tag="a"
         :to="item.url"
         class="menu-anchor"
         active-class="active-header-link"
@@ -49,16 +48,16 @@ export default {
 a {
   text-decoration: none;
   color: #08aef1;
-  transition: all 0.1s;
+  /* transition: all 0.1s; */
 }
 a:hover {
   color: #d616ac;
 }
-a:active {
+/* .menu-item a:active {
   position: relative;
   text-shadow: 0 0 5px #08aef1 !important;
   top: 1px;
-}
+} */
 
 .active-header-link {
   color: #d616ac;
