@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="welcome-tittle">
-      <h1>Добро пожаловать {{ name.firstName }} {{name.middleName}}</h1>
+      <h1>Добро пожаловать {{ userData.first }} {{ userData.middle }}</h1>
       <h3>
         Вы можете продолжить работу на сайте,выбрав один из пунктов меню,
         <br />или перейти по ссылкам ниже
@@ -32,10 +32,12 @@ export default {
     return {};
   },
   computed: {
-    name: function() {
-      return this.$store.getters.getUserName;
+    userData: function() {
+      const { first, middle, last } = this.$store.getters.getUserName || "";
+      return { first, middle, last };
     }
-  }
+  },
+  mounted() {}
 };
 </script>
 

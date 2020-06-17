@@ -6,7 +6,7 @@
           <app-tooltip
             :visible="toolltipsStatus.operationBlocked"
             @hideTooltip="toolltipsStatus.operationBlocked = false"
-            :timeout="2000"
+            :timeout="1500"
             rightbottom
           >Имеются документы на отгрузку</app-tooltip>
           <transition name="change" mode="out-in">

@@ -5,8 +5,10 @@
     <app-header class="app-header"></app-header>
     <appLoader></appLoader>
     <div class="container">
-      <app-ticket class="app-ticket" v-if="ticketRights"></app-ticket>
-      <app-transport v-if="transportList"></app-transport>
+      <app-ticket class="app-ticket" v-if="ticketRights && $route.name === 'journal'"></app-ticket>
+      <app-transport v-if="transportList  && $route.name === 'journal'"></app-transport>
+      <history-serch v-if="$route.name === 'history'"></history-serch>
+
       <transition :name="transitionName" mode="out-in">
         <router-view class="child-view" />
       </transition>
@@ -22,6 +24,7 @@ import AppTicket from "./components/contentModules/NewTicket";
 import AppTransport from "./components/contentModules/RegisterTransport";
 import Footer from "./components/Footer.vue";
 import AppLoader from "./components/minions/AppLoader";
+import HistorySerch from "./components/pages/history/HistorySerch";
 
 export default {
   components: {
@@ -29,7 +32,8 @@ export default {
     appFooter: Footer,
     appTicket: AppTicket,
     appTransport: AppTransport,
-    appLoader: AppLoader
+    appLoader: AppLoader,
+    historySerch: HistorySerch
   },
   data() {
     return {
@@ -173,13 +177,13 @@ export default {
 .slide-left-enter,
 .slide-right-leave-active {
   opacity: 0;
-  -webkit-transform: translate(100px, 0);
-  transform: translate(100px, 0);
+  -webkit-transform: translate(60px, 0);
+  transform: translate(60px, 0);
 }
 .slide-left-leave-active,
 .slide-right-enter {
   opacity: 0;
-  -webkit-transform: translate(-100px, 0);
-  transform: translate(-100px, 0);
+  -webkit-transform: translate(-60px, 0);
+  transform: translate(-60px, 0);
 }
 </style>

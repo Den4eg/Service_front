@@ -1,14 +1,7 @@
 <template>
-  <div
-    class="new-ticket-main"
-    :style="
-			ticketPosition.hiden
-				? { left: ticketPosition.value + 'px', 'box-shadow': '0 0 0 white' }
-				: ''
-		"
-  >
+  <div class="new-ticket-main" :class="!ticketPosition.hiden?'new-ticket-main__hiden':''">
     <div
-      @click.self="toggleTicket"
+      @click.prevent="toggleTicket"
       class="support-view-modifier"
       :class="ticketPosition.hiden ? 'support-view-modifier-hover' : ''"
     ></div>
@@ -27,17 +20,25 @@
       </div>
       <form class="new-ticket-form">
         <div class="input-wraper">
+          <appTooltip
+            color="#f54c4c"
+            timeout="1700"
+            right
+            inline
+            :visible="$v.ticketLabels.carNumber.$error&&!$v.ticketLabels.carNumber.minLength"
+          >Слишком короткий номер</appTooltip>
           <input
             spellcheck="false"
             autocomplete="off"
             type="text"
             class="input-spacing"
             :class="{
-							'input-error': $v.ticketLabels.carNumber.$error,
+							'input-error': $v.ticketLabels.carNumber.$error
 						}"
             id="input-carnumber"
             @input="carNumberMask('$data', 'ticketLabels', 'carNumber')"
-            v-model="$v.ticketLabels.carNumber.$model"
+            @blur="$v.ticketLabels.carNumber.$touch()"
+            v-model="ticketLabels.carNumber"
             placeholder="Номер авто"
           />
         </div>
@@ -65,7 +66,8 @@
 								true,
 							)
 						"
-            v-model="$v.ticketLabels.driverName.$model"
+            @blur="$v.ticketLabels.driverName.$touch()"
+            v-model="ticketLabels.driverName"
             placeholder="Ф.И.О."
           />
         </div>
@@ -78,7 +80,8 @@
 							'input-error': $v.ticketLabels.driverDocs.$error,
 						}"
             @input="passportMask('$data', 'ticketLabels', 'driverDocs')"
-            v-model="$v.ticketLabels.driverDocs.$model"
+            @blur="$v.ticketLabels.driverDocs.$touch()"
+            v-model="ticketLabels.driverDocs"
             placeholder="Паспорт"
           />
         </div>
@@ -93,6 +96,7 @@
 							capitalize($event.target.value, 'ticketLabels', 'organisation')
 						"
             @change="transCom"
+            @blur="$v.ticketLabels.organisation.$touch()"
             v-model="ticketLabels.organisation"
             placeholder="Организация"
           />
@@ -122,12 +126,7 @@
           <input
             spellcheck="false"
             type="text"
-            v-maska="{
-							mask: 'AA AAAA A**',
-							tokens: {
-								A: { pattern: /[0-9a-zA-Zа-яА-Я]/, uppercase: true },
-							},
-						}"
+            v-maska="trailerMaska"
             v-model="ticketLabels.trailerNumber"
             placeholder="Номер прицепа"
           />
@@ -135,22 +134,38 @@
       </form>
       <div class="btn-block">
         <div class="btn-reset btn" @click.self="formReset">Очистить</div>
-        <div class="btn-succes btn" @click.self="sendTicket">Отправить</div>
+        <div class="btn-succes btn" @click.self="sendTicket">
+          Отправить
+          <appTooltip
+            timeout="2200"
+            right
+            :visible="$v.ticketLabels.organisation.$error&&!$v.ticketLabels.organisation.required"
+          >Заполните обязательные поля</appTooltip>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import ticketMethods from "../../mixins/ticketMethods";
+import Tooltip from "../minions/Tooltip";
 
 export default {
+  components: {
+    appTooltip: Tooltip
+  },
   data() {
     return {
+      trailerMaska: {
+        mask: "AA AAAA A**",
+        tokens: {
+          A: { pattern: /[0-9a-zA-Zа-яА-Я]/, uppercase: true }
+        }
+      },
       ticketPosition: {
-        hiden: true,
-        value: -280
+        hiden: true
       },
       orgColor: "",
       selectValues: false,
@@ -163,6 +178,9 @@ export default {
         divisionCode: "",
         organisation: "",
         phone: ""
+      },
+      toolltipsStatus: {
+        globalError: false
       }
     };
   },
@@ -173,7 +191,8 @@ export default {
     ticketLabels: {
       carNumber: {
         required,
-        minLength: minLength(5)
+        minLength: minLength(5),
+        maxLength: maxLength(18)
       },
       driverName: {
         required
@@ -217,13 +236,18 @@ export default {
       }, 500);
     },
     sendTicket: function() {
-      this.$v.ticketLabels.$touch();
-      if (!this.$v.$invalid) {
-        this.toggleTicket();
-        this.$store.dispatch("CREATE_TICKET", this.sendingData);
-        this.formReset();
-        this.selectValues = false;
-      }
+      console.log(this.$v);
+
+      this.$v.$reset();
+      setTimeout(() => {
+        this.$v.ticketLabels.$touch();
+        if (!this.$v.$invalid) {
+          this.toggleTicket();
+          this.$store.dispatch("CREATE_TICKET", this.sendingData);
+          this.formReset();
+          this.selectValues = false;
+        }
+      }, 10);
     }
   },
 
@@ -255,7 +279,8 @@ export default {
     propTicketNumber: function() {
       return this.$store.getters.nextTicketNumber;
     }
-  }
+  },
+  mounted() {}
 };
 </script>
 
@@ -263,12 +288,18 @@ export default {
 .new-ticket-main {
   position: fixed;
   top: 70px;
-  left: 10px;
+  left: -280px;
   width: 280px;
   box-shadow: 4px 4px 7px #3d3d3d;
   border-radius: 3px;
   z-index: 15;
   transition: all ease-in-out 0.4s;
+  transform: translateX(0px);
+  will-change: transform;
+}
+
+.new-ticket-main__hiden {
+  transform: translateX(285px);
 }
 
 .wraper {
@@ -340,7 +371,6 @@ export default {
   box-shadow: 1px 1px 4px #08aef1;
   right: -35px;
   border-radius: 0 12% 12% 0;
-  overflow: hidden;
   cursor: pointer;
   z-index: 10;
   display: flex;
@@ -408,11 +438,44 @@ input {
   color: transparent;
   text-shadow: 0 0 0 black;
 }
+
+/* =========  Input Errors ============ */
+
 .input-error {
-  /* border: 2px solid red; */
+  animation: errors 0.5s linear;
   box-shadow: 0 0 5px 2px #f72323;
 }
 
+@keyframes errors {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  15% {
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  30% {
+    transform: translate3d(5px, 0, 0);
+  }
+
+  45% {
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  60% {
+    transform: translate3d(5px, 0, 0);
+  }
+
+  75% {
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+/* =========  Input Errors ============ */
 .input-wraper {
   position: relative;
 }

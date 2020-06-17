@@ -1,38 +1,34 @@
-import Auth from './authModule';
+import authModule from './authModule'
 
 export default {
-    modules: {
-        auth: Auth,
+  modules: {
+    auth: authModule,
+  },
+  state: {
+    divisions: [],
+  },
+  actions: {
+    DIVISIONS_GET: ({ commit }) => {
+      return new Promise((resolve) => {
+        fetch('http://localhost:3000/auth/getdivisions')
+          .then((resp) => resp.json())
+          .then((d) => {
+            commit('divisionsWrite', d.data)
+            resolve()
+          })
+          .catch((e) => console.log(e))
+      })
     },
-    state: {
-        divisions: [],
+  },
+  mutations: {
+    divisionsWrite: (state, payload) => {
+      state.divisions = payload
     },
-    actions: {
-        DIVISIONS_GET: ({ commit }) => {
-            fetch('http://localhost:3000/auth/getdivisions', {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: 'post',
-                body: JSON.stringify({ test: 'test' }),
-            })
-                .then((resp) => resp.json())
-                .then((j) => {
-                    commit('divisionsWrite', j.data);
-                })
-
-                .catch((e) => console.log(e));
-        },
+  },
+  getters: {
+    getAllDivisions: (state) => state.divisions,
+    getUser: (state) => {
+      return state.auth.user
     },
-    mutations: {
-        divisionsWrite: (state, payload) => {
-            state.divisions.push([payload]);
-        },
-    },
-    getters: {
-        getAllDivisions: (state) => state.divisions,
-        getUser: (state) => {
-            return state.auth.user;
-        },
-    },
-};
+  },
+}

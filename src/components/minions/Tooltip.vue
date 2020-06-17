@@ -1,6 +1,12 @@
 <template>
   <transition :name="side">
-    <div class="tooltip" :class="side" v-if="visibility" :key="side">
+    <div
+      :style="{'color': color}"
+      class="tooltip"
+      :class="`${side} ${inline? 'text-inline':''} `"
+      v-if="visibility"
+      :key="side"
+    >
       <span class="tooltip-span">
         <slot></slot>
       </span>
@@ -47,6 +53,18 @@ export default {
     leftbottom: {
       type: Boolean,
       default: false
+    },
+    inline: {
+      type: Boolean,
+      default: false
+    },
+    color: {
+      type: String,
+      default: "#08aef1"
+    },
+    marker: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -70,7 +88,7 @@ export default {
       } else if (this.left) {
         return "left";
       } else if (this.leftbottom) {
-        return "rightbottom";
+        return "leftbottom";
       } else if (this.rightbottom) {
         return "rightbottom";
       } else {
@@ -84,8 +102,9 @@ export default {
   methods: {
     changeVisibility(time) {
       let timeout = setTimeout(() => {
+        this.visibility = false;
         this.$emit("hideTooltip");
-        clearTimeout(timeout);
+        clearInterval(timeout);
       }, time + 500);
     }
   }
@@ -99,16 +118,18 @@ export default {
 }
 .tooltip {
   position: absolute;
-  max-width: 150px;
   padding: 10px 15px 10px 15px;
-  background: #000000ef;
-  color: #08aef1;
+  background: #000000e1;
   line-height: 18px;
   font-weight: 700;
   font-size: 16px;
   border-radius: 10px;
   z-index: 1000;
   pointer-events: none;
+  text-align: center;
+}
+.text-inline {
+  white-space: nowrap;
 }
 
 .left {
@@ -167,7 +188,8 @@ export default {
   content: "";
   position: absolute;
   left: -12px;
-  bottom: 8px;
+  top: 50%;
+  margin-top: -6px;
   border-left: 6px solid transparent;
   border-right: 6px solid #000000ef;
   border-top: 6px solid transparent;
@@ -175,7 +197,7 @@ export default {
   z-index: 999;
 }
 
-.rightbottom::before {
+.rightbottom:before {
   content: "";
   position: absolute;
   left: -12px;
