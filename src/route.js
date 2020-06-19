@@ -79,7 +79,9 @@ router.beforeEach((to, from, next) => {
   }
 })
 const getDivisions = () => {
-  store.dispatch('DIVISIONS_GET').then(console.log(store.getters.getUserProperties))
+  store
+    .dispatch('DIVISIONS_GET')
+    .then(console.log(store.getters.getUserProperties))
 }
 
 const errorListener = (err) => {

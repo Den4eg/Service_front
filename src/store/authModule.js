@@ -112,14 +112,13 @@ export default {
       commit('loadingStatus_true')
       fetch('http://127.0.0.1:3000/auth/user', {
         headers: {
-          Auth: 'Bearer ' + state.user.token,
+          'Auth': 'Bearer ' + state.user.token,
           'Content-Type': 'application/json',
         },
         method: 'POST',
       })
         .then((result) => result.json())
         .then((response) => {
-          // console.log(response)
           if (response.token) {
             commit('authStatus_true', response)
             commit('loadingStatus_false')
@@ -128,6 +127,9 @@ export default {
             commit('incoming_error', 'Bad user')
             commit('logout')
           }
+        })
+        .catch(() => {
+          commit('logout')
         })
     },
   },
