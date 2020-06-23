@@ -3,8 +3,8 @@
     <div class="history-sort"></div>
     <div class="cards-wrapper">
       <div class="history-cards">
-        <div v-for="car in transport" :key="car.ticketNumber" @click="side = !side">
-          <car-card :cardData="car"></car-card>
+        <div class="car-component" v-for="car in transport" v-bind:key="car.ticketNumber">
+          <car-card v-bind:cardData="car"></car-card>
         </div>
       </div>
     </div>
@@ -53,6 +53,7 @@ export default {
 }
 
 .history-cards {
+  perspective: 1500;
   min-width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 252px));

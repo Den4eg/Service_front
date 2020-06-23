@@ -1,0 +1,6 @@
+{
+  "prettier.semi": false,
+  "prettier.useEditorConfig": false,
+  "prettier.vueIndentScriptAndStyle": true,
+  "prettier.singleQuote": true
+}

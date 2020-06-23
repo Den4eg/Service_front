@@ -204,9 +204,13 @@ export default {
           'мейжор',
           'мейджор',
           'мейжор',
+          'm',
+          'ma',
+          'maj',
+          'majo',
           'major',
         ],
-        ['дчл', 'дичел', 'дхл', 'диейчел', 'диейчэл', 'dhl', 'd', 'д'],
+        ['дчл', 'дичел', 'дхл', 'диейчел', 'диейчэл', 'dhl', 'dh', 'd', 'д'],
         ['пэк', 'пек', 'п', 'пе', 'пэ'],
         [
           'ж',
@@ -228,7 +232,6 @@ export default {
         '#5630df',
         '#4db64d',
         '#3ecfb7',
-        '#3e3e3e00',
       ],
       label: ['Деловые Линии', 'Major', 'DHL', 'ПЭК', 'Желдор', 'Эйртранс'],
     },
@@ -237,11 +240,8 @@ export default {
     CREATE_TICKET: ({ state }, payload) => {
       state.transportToday.push(payload)
     },
-    PATCH_DOCS: ({ state }, payload) => {
-      state.transportToday
-        .find((ticket) => ticket.ticketNumber === payload.ticketNumber)
-        .documents.push([payload.docs])
-    },
+    UPDATE_TICKET: () => {},
+    CLOSE_TICKET: () => {},
   },
   mutations: {},
   getters: {

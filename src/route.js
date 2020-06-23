@@ -7,6 +7,7 @@ import Register from './components/pages/auth/Register'
 import History from './components/pages/history/History'
 import Visitors from './components/pages/visitors/Visitors'
 import Admin from './components/pages/admin/admin.main'
+import AppJournal from '@/components/pages/journal/AppJournal'
 
 const router = new VueRouter({
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -29,7 +30,7 @@ const router = new VueRouter({
     {
       name: 'journal',
       path: '/journal',
-      component: () => import('@/components/pages/journal/AppJournal'),
+      component: AppJournal,
       meta: {
         ifAuthenticated: true,
       },
@@ -79,9 +80,8 @@ router.beforeEach((to, from, next) => {
   }
 })
 const getDivisions = () => {
-  store
-    .dispatch('DIVISIONS_GET')
-    .then(console.log(store.getters.getUserProperties))
+  store.dispatch('DIVISIONS_GET')
+  // .then(console.log(store.getters.getUserProperties))
 }
 
 const errorListener = (err) => {
