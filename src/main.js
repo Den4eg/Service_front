@@ -1,14 +1,13 @@
-/* eslint-disable */
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
-import Vue from 'vue';
-import App from './App';
-import VueRouter from 'vue-router';
-import router from './route';
-import store from './store';
+import Vue from 'vue'
+import App from './App'
+import VueRouter from 'vue-router'
+import router from './route'
+import store from './store'
 
-import Vuelidate from 'vuelidate';
-import Maska from 'maska';
+import Vuelidate from 'vuelidate'
+import Maska from 'maska'
 //=================== fetch interceptors =====================
 
 // (function() {
@@ -23,13 +22,13 @@ import Maska from 'maska';
 
 //=================== fetch interceptors =====================
 
-Vue.use(Maska);
-Vue.use(Vuelidate);
-Vue.use(VueRouter);
+Vue.use(Maska)
+Vue.use(Vuelidate)
+Vue.use(VueRouter)
 
 new Vue({
-    el: '#app',
-    router,
-    store,
-    render: (h) => h(App),
-});
+  el: '#app',
+  router,
+  store,
+  render: (h) => h(App),
+})

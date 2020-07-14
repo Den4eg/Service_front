@@ -67,8 +67,6 @@
       <div class="btn-reset btn" @click.self="formReset">Очистить</div>
       <div class="btn-succes btn" @click.self="sendTicket">Искать</div>
     </div>
-    <hr />
-    <p>Сортировка</p>
   </div>
 </template>
 

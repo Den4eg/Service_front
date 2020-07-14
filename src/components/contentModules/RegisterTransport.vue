@@ -1,15 +1,5 @@
 <template>
-  <div
-    class="new-ticket-main"
-    :style="
-            ticketPosition.hiden
-                ? {
-                      left: ticketPosition.value + 'px',
-                      'box-shadow': '0 0 0 black'
-                  }
-                : ''
-        "
-  >
+  <div class="new-ticket-main" :class="!ticketPosition.hiden?'new-ticket-main__hiden':''">
     <div
       @click="toggleTicket"
       class="support-view-modifier"
@@ -46,8 +36,7 @@ export default {
   data() {
     return {
       ticketPosition: {
-        hiden: true,
-        value: -290
+        hiden: true
       },
       searchCar: ""
     };
@@ -84,8 +73,8 @@ export default {
   background-color: #333;
   position: fixed;
   top: 70px;
-  left: 10px;
-  box-shadow: 4px 4px 7px #3d3d3d;
+  left: -290px;
+  box-shadow: -4px 4px 7px #3d3d3d;
   width: 290px;
   height: 500px;
   border-radius: 3px;
@@ -136,6 +125,10 @@ export default {
   width: 10px;
   word-wrap: break-word;
   padding: 12px 15px 13px 0;
+}
+
+.new-ticket-main__hiden {
+  transform: translateX(296px);
 }
 
 .scroll-wraper {
