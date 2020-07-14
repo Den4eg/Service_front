@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import transport from './transport'
+import employeeCars from './employeeCars'
+import divisionsAll from './divisionsAll'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
-  }
+    transport: transport,
+    employeeCars: employeeCars,
+    divisionsAll: divisionsAll,
+  },
 })
