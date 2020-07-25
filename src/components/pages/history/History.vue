@@ -1,10 +1,11 @@
 <template>
   <div class="main-history">
+    <edit-card :data="editTicket" @changeEditStatus="editTicket = {}"></edit-card>
     <div class="history-sort"></div>
     <div class="cards-wrapper">
       <div class="history-cards">
         <div class="car-component" v-for="car in transport" v-bind:key="car.ticketNumber">
-          <car-card v-bind:cardData="car"></car-card>
+          <car-card v-bind:cardData="car" @editCard2="test(car)"></car-card>
         </div>
       </div>
     </div>
@@ -13,13 +14,23 @@
 
 <script scoped>
 import CarCard from "./CarCard";
+import editCard from "./EditCard";
 export default {
-  components: { CarCard },
+  components: { CarCard, editCard },
   data() {
     return {
-      side: true
+      editTicket: {}
     };
   },
+  methods: {
+    test(val) {
+      this.$store.dispatch("UPDATE_TICKET", val.ticketNumber).then(el => {
+        let [ticket] = el;
+        this.editTicket = ticket;
+      });
+    }
+  },
+
   computed: {
     transport() {
       const copyArray = [...this.$store.getters.allTransportToday];
@@ -41,6 +52,7 @@ export default {
 
 <style scoped>
 .main-history {
+  position: relative;
   grid-area: main;
   margin-top: 10px;
   overflow: visible;
