@@ -8,6 +8,8 @@ import store from './store'
 
 import Vuelidate from 'vuelidate'
 import Maska from 'maska'
+
+import 'normalize.css'
 //=================== fetch interceptors =====================
 
 // (function() {

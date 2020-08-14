@@ -269,12 +269,17 @@ export default {
           'ж',
           'жд',
           'желдор',
+          'желдорка',
           'жилдор',
+          'жилдорка',
           'жел',
+          'жил',
           'желдорекспедиция',
           'желдорэкспедиция',
-          'желдорекспидиция',
-          'желдорэкспидиция',
+          'жэлдорэкспедиция',
+          'жилдорекспидиция',
+          'жилдорекспeдиция',
+          'жилдорэкспидиция',
         ],
         ['эйртранс', 'ейртранс', 'ейр', 'эйр', 'айр', 'Эайртранс', 'э', 'а'],
       ],
@@ -293,7 +298,11 @@ export default {
     CREATE_TICKET: ({ state }, payload) => {
       state.transportToday.push(payload)
     },
-    UPDATE_TICKET: () => {},
+    UPDATE_TICKET: ({ state }, num) => {
+      return state.transportToday.filter((ticket) => {
+        return ticket.ticketNumber == num ? ticket : null
+      })
+    },
     CLOSE_TICKET: () => {},
   },
   mutations: {},
